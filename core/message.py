@@ -1,7 +1,7 @@
 
 """
 将dict[str,str]转换为Message消息类
-管理上下文消息
+便于管理上下文消息
 """
 from typing import Literal,Optional,Iterator
 

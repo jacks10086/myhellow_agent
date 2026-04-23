@@ -43,8 +43,12 @@ class MyLLM:
     Returns:
         Iterator[str]: 流式的输出，每个元素是一个字符串迭代对象
     """
-    def invoke(self,message:list[dict[str,str]], temperature:Optional[float] = None)->Iterator[str]:
+    def think(self,message:list[dict[str,str]], temperature:Optional[float] = None, **kwargs)->Iterator[str]:
         print(f"正在调用模型{self.model}")
+        """
+        流式调用
+        """
+
         # 设置温度
         if temperature is not None:
             self.temperature = temperature
@@ -58,12 +62,13 @@ class MyLLM:
                 temperature=self.temperature,
                 **kwargs
             )
-
+            # 处理流式响应
             for chunk in response:
-                content = chunk.choices[0].delta.content or ""
-                print(content, end = "", flush=True) # 实时打印, 不换行, 不等缓冲区满就输出
-                yield content
-            print() # 打印换行符, 使输出更美观
+                if chunk.choices:  # 检查 choices 是否为空（流式结束时可能为空列表）
+                    content = chunk.choices[0].delta.content or ""
+                    if content: #最后一个chunk的content为空None，需要过滤
+                        print(content, end = "", flush=True)
+                        yield content
 
         except Exception as e:
             print(f"调用模型{self.model}失败，错误信息：{e}")

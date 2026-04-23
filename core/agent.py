@@ -1,5 +1,6 @@
 """
 智能体基类，在llm基础上搭建智能体基类
+v1:需要先区分系统提示词和用户提示词
 """
 
 from core.llm import MyLLM
@@ -11,7 +12,7 @@ from core.config import Config
 class BaseAgent(ABC):
     agentName: Optional[str] = None           # 智能体名称
     llm: MyLLM                                # LLM模型
-    systemPrompt: Optional[str] = None        # 系统提示
+    systemPrompt: Optional[str] = None        # 系统提示词
     _history: list[Message] = []             # 历史记录 私有属性
     config: Optional[Config] = None           # 配置类
 
@@ -19,7 +20,7 @@ class BaseAgent(ABC):
         self, 
         name: str, 
         llm: MyLLM,
-        system_prompt: Optional[str] = None,
+        system_prompt: Optional[str] = None,      
         config: Optional[Config] = None
         ):
         self.agentName = name
