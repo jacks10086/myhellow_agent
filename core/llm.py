@@ -7,10 +7,12 @@ LLM
 from openai import OpenAI
 import os
 from typing import Literal,Optional,Iterator
-from dotenv import load_dotenv
 
-load_dotenv()
-
+"""
+职责分离，只关心模型调用，不关心其他业务逻辑
+#from dotenv import load_dotenv
+#load_dotenv()
+"""
 class MyLLM:
     def __init__(
         self,
